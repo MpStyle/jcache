@@ -20,7 +20,7 @@ Lazy and naive cache using in memory SQLite database
 <dependency>
     <groupId>com.github.MpStyle</groupId>
     <artifactId>jcache</artifactId>
-    <version>v1.0.0</version>
+    <version>v1.1.0</version>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@ allprojects {
 ...
 
 dependencies {
-    compile 'com.github.MpStyle:jcache:v1.0.0'
+    compile 'com.github.MpStyle:jcache:v1.1.0'
 }
 
 ```
