@@ -1,14 +1,10 @@
 package mpstyle.jcache;
 
-import com.sun.istack.internal.NotNull;
-
 public class CacheItem {
-  @NotNull
   private String key;
   private String value;
   private int ttl;
 
-  @NotNull
   public String getKey() {
     return key;
   }
