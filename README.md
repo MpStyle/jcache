@@ -2,7 +2,7 @@
 
 Lazy and naive cache using in memory SQLite database
 
-[![Build Status](https://travis-ci.org/MpStyle/jcache.svg?branch=master)](https://travis-ci.org/MpStyle/jcache)
+[![Build Status](https://travis-ci.org/MpStyle/jcache.svg?branch=master)](https://travis-ci.org/MpStyle/jcache) [![](https://jitpack.io/v/MpStyle/jcache.svg)](https://jitpack.io/#MpStyle/jcache)
 
 ## Installation
 
