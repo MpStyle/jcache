@@ -8,6 +8,7 @@ public class CacheTest {
   public void addAndGet1() throws Exception {
     Cache cache = new Cache();
     Assert.assertTrue(cache.add("a", "b"));
+    Assert.assertTrue(cache.exists("a"));
     Assert.assertEquals("b", cache.get("a"));
   }
 
@@ -23,10 +24,12 @@ public class CacheTest {
     cache.add(item);
 
     Assert.assertEquals("b", cache.get("a"));
+    Assert.assertTrue(cache.exists("a"));
 
     Thread.sleep(4);
 
     Assert.assertTrue(cache.get("a") == null);
+    Assert.assertFalse(cache.exists("a"));
   }
 
   @Test
@@ -34,8 +37,10 @@ public class CacheTest {
     Cache cache = new Cache();
     cache.add("a", "b");
     Assert.assertEquals("b", cache.get("a"));
+    Assert.assertTrue(cache.exists("a"));
     Assert.assertTrue(cache.clear());
     Assert.assertTrue(cache.get("a") == null);
+    Assert.assertFalse(cache.exists("a"));
   }
 
 }
