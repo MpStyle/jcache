@@ -1,6 +1,6 @@
 # jCache
 
-Lazy and naive cache using in memory SQLite database
+Lazy and naive cache using in memory SQLite or H2 database
 
 [![Build Status](https://travis-ci.org/MpStyle/jcache.svg?branch=master)](https://travis-ci.org/MpStyle/jcache) [![](https://jitpack.io/v/MpStyle/jcache.svg)](https://jitpack.io/#MpStyle/jcache)
 
@@ -20,7 +20,7 @@ Lazy and naive cache using in memory SQLite database
 <dependency>
     <groupId>com.github.MpStyle</groupId>
     <artifactId>jcache</artifactId>
-    <version>v1.3.0</version>
+    <version>v2.0.0</version>
 </dependency>
 ```
 
@@ -36,15 +36,26 @@ allprojects {
 ...
 
 dependencies {
-    compile 'com.github.MpStyle:jcache:v1.3.0'
+    compile 'com.github.MpStyle:jcache:v2.0.0'
 }
 
 ```
 
 ## Usages
 
+Create a connection using SQLite:
 ```java
-Cache cache = new Cache();
+Cache cache = CacheBuilder.getSqliteCache();
+```
+
+or using H2:
+```java
+Cache cache = CacheBuilder.getH2Cache();
+```
+
+Insert a new item in the cache:
+```java
+Cache cache = CacheBuilder.getSqliteCache();
 cache.add("a", "b");
 
 [...]
@@ -55,7 +66,7 @@ String value = cache.get("a");
 Or:
 
 ```java
-Cache cache = new Cache();
+Cache cache = CacheBuilder.getSqliteCache();
 CacheItem item = new CacheItem();
 
 item.setKey("a");

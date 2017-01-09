@@ -4,10 +4,10 @@ import java.sql.SQLException;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CacheTest {
+public class SqliteCacheTest {
   @Test
   public void addAndGet1() throws Exception {
-    Cache cache = new Cache();
+    Cache cache = CacheBuilder.getSqliteCache();
     Assert.assertTrue(cache.add("a", "b"));
     Assert.assertTrue(cache.exists("a"));
     Assert.assertEquals("b", cache.get("a"));
@@ -15,7 +15,7 @@ public class CacheTest {
 
   @Test
   public void addAndGet2() throws Exception {
-    Cache cache = new Cache();
+    Cache cache = CacheBuilder.getSqliteCache();
     CacheItem item = new CacheItem();
 
     item.setKey("a");
@@ -35,7 +35,7 @@ public class CacheTest {
 
   @Test
   public void clear() throws Exception {
-    Cache cache = new Cache();
+    Cache cache = CacheBuilder.getSqliteCache();
     cache.add("c", "d");
     Assert.assertEquals("d", cache.get("c"));
     Assert.assertTrue(cache.exists("c"));
@@ -46,7 +46,7 @@ public class CacheTest {
 
   @Test
   public void pop() throws SQLException, ClassNotFoundException {
-    Cache cache = new Cache();
+    Cache cache = CacheBuilder.getSqliteCache();
     cache.add("a", "b");
     Assert.assertEquals("b", cache.get("a"));
     Assert.assertTrue(cache.exists("a"));
