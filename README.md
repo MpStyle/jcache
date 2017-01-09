@@ -20,7 +20,7 @@ Lazy and naive cache using in memory SQLite database
 <dependency>
     <groupId>com.github.MpStyle</groupId>
     <artifactId>jcache</artifactId>
-    <version>v1.2.0</version>
+    <version>v1.3.0</version>
 </dependency>
 ```
 
@@ -36,7 +36,7 @@ allprojects {
 ...
 
 dependencies {
-    compile 'com.github.MpStyle:jcache:v1.2.0'
+    compile 'com.github.MpStyle:jcache:v1.3.0'
 }
 
 ```
@@ -54,7 +54,7 @@ String value = cache.get("a");
 
 Or:
 
-```
+```java
 Cache cache = new Cache();
 CacheItem item = new CacheItem();
 
@@ -67,15 +67,17 @@ cache.add(item);
 [...]
 
 String value = cache.get("a");
-
 ```
 
 To clear the cache:
 
+```java
+cache.clear();
 ```
 
-cache.clear();
-
+To delete a specific item
+```java
+cache.delete("key_of_the_item_to_delete");
 ```
 
 ## Version
