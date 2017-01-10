@@ -1,4 +1,4 @@
-package mpstyle.jcache;
+package mpstyle.jcache.client;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,22 +6,63 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import mpstyle.jcache.Cache;
+import mpstyle.jcache.entity.CacheItem;
 
 /**
- * Lazy and naive cache using in memory H2 database
+ * Lazy and naive cache using in memory MySQL database.<br>
+ * The max key size is 255 characters.
  */
-public class H2Cache implements Cache {
-  private final static int KEY_MAX_LENGTH = 512;
+public class MysqlCache implements Cache {
+  private final static int KEY_MAX_LENGTH = 255;
   private final static String INSERT_SQL = "INSERT INTO jcache(`key`, ttl, creation_timestamp, `value`) VALUES(?, ?, ?, ?)";
   private final static String SELECT_SQL = "SELECT `value`, `key` FROM jcache WHERE `key` = ? AND ttl + creation_timestamp > ?";
   private final static String DELETE_SQL = "DELETE FROM jcache";
-  private final static String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS jcache(key varchar("+String.valueOf(KEY_MAX_LENGTH)+") PRIMARY KEY, ttl BIGINT, creation_timestamp BIGINT, value TEXT)";
+  private final static String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS jcache(`key` varchar("
+      + String.valueOf(KEY_MAX_LENGTH) + ") PRIMARY KEY NOT NULL, ttl BIGINT, creation_timestamp BIGINT, `value` TEXT)";
 
-  private final Connection connection;
+  private Connection connection;
 
-  public H2Cache() throws SQLException, ClassNotFoundException {
-    connection = DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
+  /**
+   * Create a mysql cache object using the parameters for the connection.
+   *
+   * @param username The username to access to the database
+   * @param password The password to access to the database
+   * @param host The host of the database
+   * @param port The port of the database
+   * @param databaseName The database name
+   * @throws ClassNotFoundException
+   * @throws SQLException
+   */
+  public MysqlCache(String username, String password, String host, String port, String databaseName)
+      throws ClassNotFoundException, SQLException {
+    Class.forName("com.mysql.jdbc.Driver");
+    String DB_URL = "jdbc:mysql://" + host + ":" + port + "/" + databaseName;
+    connection = DriverManager.getConnection(DB_URL, username, password);
 
+    createCacheTable();
+  }
+
+  /**
+   * Create a mysql cache object using the parameters for the connection.
+   *
+   * @param username The username to access to the database
+   * @param password The password to access to the database
+   * @param host The host of the database
+   * @param databaseName The database name
+   * @throws ClassNotFoundException
+   * @throws SQLException
+   */
+  public MysqlCache(String username, String password, String host, String databaseName) throws ClassNotFoundException,
+      SQLException {
+    Class.forName("com.mysql.jdbc.Driver");
+    String DB_URL = "jdbc:mysql://" + host + "/" + databaseName;
+    connection = DriverManager.getConnection(DB_URL, username, password);
+
+    createCacheTable();
+  }
+
+  private void createCacheTable() throws SQLException {
     Statement statement = connection.createStatement();
     statement.executeUpdate(CREATE_TABLE_SQL);
   }
@@ -34,7 +75,7 @@ public class H2Cache implements Cache {
    * @return Returns true if the cache will be cleaned without problems, otherwise false.
    */
   public boolean add(String key, String value) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return false;
     }
 
@@ -54,7 +95,7 @@ public class H2Cache implements Cache {
    * @return Returns true if the cache will be cleaned without problems, otherwise false.
    */
   public boolean add(CacheItem item) {
-    if(!validateKey(item.getKey())){
+    if (!validateKey(item.getKey())) {
       return false;
     }
 
@@ -85,6 +126,10 @@ public class H2Cache implements Cache {
    * @return true if item linked to the key exists, otherwise false.
    */
   public boolean exists(String key) {
+    if (!validateKey(key)) {
+      return false;
+    }
+
     return get(key) != null;
   }
 
@@ -95,13 +140,12 @@ public class H2Cache implements Cache {
    * @return true if the item will be deleted, otherwise false.
    */
   public boolean delete(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return false;
     }
 
     try {
-      PreparedStatement deleteStatement = connection.prepareStatement(
-          DELETE_SQL + " WHERE key = ?");
+      PreparedStatement deleteStatement = connection.prepareStatement(DELETE_SQL + " WHERE `key` = ?");
       deleteStatement.setString(1, key);
       deleteStatement.executeUpdate();
 
@@ -120,7 +164,7 @@ public class H2Cache implements Cache {
    * @return Returns the value of the item with <i>key</i> if it exists, otherwise null.
    */
   public String get(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return null;
     }
 
@@ -153,7 +197,7 @@ public class H2Cache implements Cache {
    * @return Returns the value of the item with <i>key</i> if it exists, otherwise null.
    */
   public String pop(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return null;
     }
 
@@ -186,7 +230,7 @@ public class H2Cache implements Cache {
     return false;
   }
 
-  private boolean validateKey(String key){
+  private boolean validateKey(String key) {
     return key.length() <= KEY_MAX_LENGTH;
   }
 }

@@ -1,4 +1,4 @@
-package mpstyle.jcache;
+package mpstyle.jcache.entity;
 
 public class CacheItem {
   private String key;

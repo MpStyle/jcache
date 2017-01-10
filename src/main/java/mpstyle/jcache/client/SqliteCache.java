@@ -1,4 +1,4 @@
-package mpstyle.jcache;
+package mpstyle.jcache.client;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import mpstyle.jcache.Cache;
+import mpstyle.jcache.entity.CacheItem;
 
 /**
  * Lazy and naive cache using in memory SQLite database

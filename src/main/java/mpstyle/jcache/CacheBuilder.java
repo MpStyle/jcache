@@ -1,6 +1,9 @@
 package mpstyle.jcache;
 
 import java.sql.SQLException;
+import mpstyle.jcache.client.H2Cache;
+import mpstyle.jcache.client.MysqlCache;
+import mpstyle.jcache.client.SqliteCache;
 
 /**
  * Utility class to create, using static methods, un instance of {@link Cache} for the supported database.

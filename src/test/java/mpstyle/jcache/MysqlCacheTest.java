@@ -2,6 +2,7 @@ package mpstyle.jcache;
 
 import java.sql.SQLException;
 
+import mpstyle.jcache.entity.CacheItem;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

@@ -1,7 +1,9 @@
 package mpstyle.jcache;
 
+import mpstyle.jcache.entity.CacheItem;
+
 /**
- * Lazy and naive cache using in memory SQLite database
+ * Lazy and naive cache.
  */
 public interface Cache {
 
