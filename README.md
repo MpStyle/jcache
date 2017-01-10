@@ -1,6 +1,6 @@
 # jCache
 
-Lazy and naive cache using in memory SQLite or H2 database
+Lazy and naive cache using in memory SQLite, H2 and MySQL database.
 
 [![Build Status](https://travis-ci.org/MpStyle/jcache.svg?branch=master)](https://travis-ci.org/MpStyle/jcache) [![](https://jitpack.io/v/MpStyle/jcache.svg)](https://jitpack.io/#MpStyle/jcache)
 
