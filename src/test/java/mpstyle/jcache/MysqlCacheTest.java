@@ -12,7 +12,7 @@ public class MysqlCacheTest {
 
   @Before
   public void setUp() throws Exception {
-    cache = CacheBuilder.getMysqlCache("test", "", "localhost", "jcache");
+    cache = CacheBuilder.getMysqlCache("test", "", "mysql", "jcache");
   }
 
   @After
