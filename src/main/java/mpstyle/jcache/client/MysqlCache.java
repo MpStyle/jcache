@@ -20,6 +20,7 @@ public class MysqlCache implements Cache {
   private final static String DELETE_SQL = "DELETE FROM jcache";
   private final static String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS jcache(`key` varchar("
       + String.valueOf(KEY_MAX_LENGTH) + ") PRIMARY KEY NOT NULL, ttl BIGINT, creation_timestamp BIGINT, `value` TEXT)";
+  private final static String DROP_SQL = "DROP TABLE jcache";
 
   private Connection connection;
 
@@ -225,6 +226,22 @@ public class MysqlCache implements Cache {
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();
+    }
+
+    return false;
+  }
+
+  public boolean close() {
+    try {
+      PreparedStatement deleteStatement = connection.prepareStatement(DROP_SQL);
+      deleteStatement.executeUpdate();
+
+      connection.close();
+      connection=null;
+
+      return true;
+    } catch (SQLException e) {
+      e.printStackTrace();
     }
 
     return false;

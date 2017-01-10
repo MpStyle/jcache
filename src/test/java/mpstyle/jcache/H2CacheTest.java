@@ -1,15 +1,21 @@
 package mpstyle.jcache;
 
 import java.sql.SQLException;
-
 import mpstyle.jcache.entity.CacheItem;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class H2CacheTest {
+  private Cache cache;
+
+  @Before
+  public void setUp() throws Exception {
+    cache = CacheBuilder.getH2Cache();
+  }
+
   @Test
   public void addAndGet1() throws Exception {
-    Cache cache = CacheBuilder.getH2Cache();
     Assert.assertTrue(cache.add("a", "b"));
     Assert.assertTrue(cache.exists("a"));
     Assert.assertEquals("b", cache.get("a"));
@@ -17,7 +23,6 @@ public class H2CacheTest {
 
   @Test
   public void addAndGet2() throws Exception {
-    Cache cache = CacheBuilder.getH2Cache();
     CacheItem item = new CacheItem();
 
     item.setKey("a");
@@ -37,7 +42,6 @@ public class H2CacheTest {
 
   @Test
   public void clear() throws Exception {
-    Cache cache = CacheBuilder.getH2Cache();
     cache.add("c", "d");
     Assert.assertEquals("d", cache.get("c"));
     Assert.assertTrue(cache.exists("c"));
@@ -48,12 +52,19 @@ public class H2CacheTest {
 
   @Test
   public void pop() throws SQLException, ClassNotFoundException {
-    Cache cache = CacheBuilder.getH2Cache();
     cache.add("a", "b");
     Assert.assertEquals("b", cache.get("a"));
     Assert.assertTrue(cache.exists("a"));
     Assert.assertEquals("b", cache.pop("a"));
     Assert.assertTrue(cache.get("a") == null);
     Assert.assertFalse(cache.exists("a"));
+  }
+
+  @Test
+  public void close() throws SQLException, ClassNotFoundException {
+    Assert.assertTrue(cache.add("a", "b"));
+    Assert.assertEquals("b", cache.get("a"));
+    Assert.assertTrue(cache.close());
+    Assert.assertFalse(cache.add("a", "b"));
   }
 }

@@ -19,7 +19,7 @@ public class H2Cache implements Cache {
   private final static String DELETE_SQL = "DELETE FROM jcache";
   private final static String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS jcache(key varchar("+String.valueOf(KEY_MAX_LENGTH)+") PRIMARY KEY, ttl BIGINT, creation_timestamp BIGINT, value TEXT)";
 
-  private final Connection connection;
+  private Connection connection;
 
   public H2Cache() throws SQLException, ClassNotFoundException {
     connection = DriverManager.getConnection("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
@@ -183,6 +183,19 @@ public class H2Cache implements Cache {
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();
+    }
+
+    return false;
+  }
+
+  public boolean close() {
+    try {
+      connection.close();
+      connection=null;
+
+      return true;
+    } catch (SQLException e) {
+      //e.printStackTrace();
     }
 
     return false;

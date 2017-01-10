@@ -18,7 +18,7 @@ public class SqliteCache implements Cache {
   private final static String DELETE_SQL = "DELETE FROM jcache";
   private final static String CREATE_TABLE_SQL = "CREATE TABLE IF NOT EXISTS jcache(key TEXT PRIMARY KEY, ttl INT, creation_timestamp INT, value TEXT)";
 
-  private final Connection connection;
+  private Connection connection;
 
   public SqliteCache() throws SQLException, ClassNotFoundException {
     connection = DriverManager.getConnection("jdbc:sqlite::memory:");
@@ -162,6 +162,19 @@ public class SqliteCache implements Cache {
       return true;
     } catch (Exception ex) {
       ex.printStackTrace();
+    }
+
+    return false;
+  }
+
+  public boolean close() {
+    try {
+      connection.close();
+      connection=null;
+
+      return true;
+    } catch (SQLException e) {
+ //     e.printStackTrace();
     }
 
     return false;

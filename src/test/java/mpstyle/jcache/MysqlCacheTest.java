@@ -1,9 +1,7 @@
 package mpstyle.jcache;
 
 import java.sql.SQLException;
-
 import mpstyle.jcache.entity.CacheItem;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +12,6 @@ public class MysqlCacheTest {
   @Before
   public void setUp() throws Exception {
     cache = CacheBuilder.getMysqlCache("travis", "", "127.0.0.1", "jcache");
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    cache.clear();
   }
 
   @Test
@@ -65,5 +58,13 @@ public class MysqlCacheTest {
     Assert.assertEquals("b", cache.pop("a"));
     Assert.assertTrue(cache.get("a") == null);
     Assert.assertFalse(cache.exists("a"));
+  }
+
+  @Test
+  public void close() throws SQLException, ClassNotFoundException {
+    Assert.assertTrue(cache.add("a", "b"));
+    Assert.assertEquals("b", cache.get("a"));
+    Assert.assertTrue(cache.close());
+    Assert.assertFalse(cache.add("a", "b"));
   }
 }
