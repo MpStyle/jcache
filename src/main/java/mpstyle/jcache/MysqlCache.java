@@ -8,7 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Lazy and naive cache using in memory SQLite database
+ * Lazy and naive cache using in memory MySQL database.<br>
+ * The max key size is 255 characters.
  */
 public class MysqlCache implements Cache {
   private final static int KEY_MAX_LENGTH = 255;
@@ -20,6 +21,17 @@ public class MysqlCache implements Cache {
 
   private Connection connection;
 
+  /**
+   * Create a mysql cache object using the parameters for the connection.
+   *
+   * @param username The username to access to the database
+   * @param password The password to access to the database
+   * @param host The host of the database
+   * @param port The port of the database
+   * @param databaseName The database name
+   * @throws ClassNotFoundException
+   * @throws SQLException
+   */
   public MysqlCache(String username, String password, String host, String port, String databaseName)
       throws ClassNotFoundException, SQLException {
     Class.forName("com.mysql.jdbc.Driver");
@@ -29,8 +41,18 @@ public class MysqlCache implements Cache {
     createCacheTable();
   }
 
-  public MysqlCache(String username, String password, String host, String databaseName)
-      throws ClassNotFoundException, SQLException {
+  /**
+   * Create a mysql cache object using the parameters for the connection.
+   *
+   * @param username The username to access to the database
+   * @param password The password to access to the database
+   * @param host The host of the database
+   * @param databaseName The database name
+   * @throws ClassNotFoundException
+   * @throws SQLException
+   */
+  public MysqlCache(String username, String password, String host, String databaseName) throws ClassNotFoundException,
+      SQLException {
     Class.forName("com.mysql.jdbc.Driver");
     String DB_URL = "jdbc:mysql://" + host + "/" + databaseName;
     connection = DriverManager.getConnection(DB_URL, username, password);
@@ -51,7 +73,7 @@ public class MysqlCache implements Cache {
    * @return Returns true if the cache will be cleaned without problems, otherwise false.
    */
   public boolean add(String key, String value) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return false;
     }
 
@@ -71,7 +93,7 @@ public class MysqlCache implements Cache {
    * @return Returns true if the cache will be cleaned without problems, otherwise false.
    */
   public boolean add(CacheItem item) {
-    if(!validateKey(item.getKey())){
+    if (!validateKey(item.getKey())) {
       return false;
     }
 
@@ -102,7 +124,7 @@ public class MysqlCache implements Cache {
    * @return true if item linked to the key exists, otherwise false.
    */
   public boolean exists(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return false;
     }
 
@@ -116,7 +138,7 @@ public class MysqlCache implements Cache {
    * @return true if the item will be deleted, otherwise false.
    */
   public boolean delete(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return false;
     }
 
@@ -140,7 +162,7 @@ public class MysqlCache implements Cache {
    * @return Returns the value of the item with <i>key</i> if it exists, otherwise null.
    */
   public String get(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return null;
     }
 
@@ -173,7 +195,7 @@ public class MysqlCache implements Cache {
    * @return Returns the value of the item with <i>key</i> if it exists, otherwise null.
    */
   public String pop(String key) {
-    if(!validateKey(key)){
+    if (!validateKey(key)) {
       return null;
     }
 
@@ -206,7 +228,7 @@ public class MysqlCache implements Cache {
     return false;
   }
 
-  private boolean validateKey(String key){
+  private boolean validateKey(String key) {
     return key.length() <= KEY_MAX_LENGTH;
   }
 }

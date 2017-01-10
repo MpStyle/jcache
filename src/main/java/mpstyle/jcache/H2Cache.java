@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Lazy and naive cache using in memory SQLite database
+ * Lazy and naive cache using in memory H2 database
  */
 public class H2Cache implements Cache {
   private final static int KEY_MAX_LENGTH = 512;
