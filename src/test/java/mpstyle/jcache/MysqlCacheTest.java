@@ -1,13 +1,27 @@
 package mpstyle.jcache;
 
 import java.sql.SQLException;
+
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-public class SqliteCacheTest {
+public class MysqlCacheTest {
+  private Cache cache;
+
+  @Before
+  public void setUp() throws Exception {
+    cache = CacheBuilder.getMysqlCache("test", "", "localhost", "jcache");
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    cache.clear();
+  }
+
   @Test
   public void addAndGet1() throws Exception {
-    Cache cache = CacheBuilder.getSqliteCache();
     Assert.assertTrue(cache.add("a", "b"));
     Assert.assertTrue(cache.exists("a"));
     Assert.assertEquals("b", cache.get("a"));
@@ -15,7 +29,6 @@ public class SqliteCacheTest {
 
   @Test
   public void addAndGet2() throws Exception {
-    Cache cache = CacheBuilder.getSqliteCache();
     CacheItem item = new CacheItem();
 
     item.setKey("a");
@@ -35,7 +48,6 @@ public class SqliteCacheTest {
 
   @Test
   public void clear() throws Exception {
-    Cache cache = CacheBuilder.getSqliteCache();
     cache.add("c", "d");
     Assert.assertEquals("d", cache.get("c"));
     Assert.assertTrue(cache.exists("c"));
@@ -46,7 +58,6 @@ public class SqliteCacheTest {
 
   @Test
   public void pop() throws SQLException, ClassNotFoundException {
-    Cache cache = CacheBuilder.getSqliteCache();
     cache.add("a", "b");
     Assert.assertEquals("b", cache.get("a"));
     Assert.assertTrue(cache.exists("a"));

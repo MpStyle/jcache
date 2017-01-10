@@ -24,4 +24,12 @@ public class CacheBuilder {
   public static Cache getSqliteCache() throws SQLException, ClassNotFoundException {
     return new SqliteCache();
   }
+
+  public static Cache getMysqlCache(String username, String password, String host, String port, String databaseName) throws SQLException, ClassNotFoundException {
+    return new MysqlCache(username, password, host, port, databaseName);
+  }
+
+  public static Cache getMysqlCache(String username, String password, String host, String databaseName) throws SQLException, ClassNotFoundException {
+    return new MysqlCache(username, password, host, databaseName);
+  }
 }
