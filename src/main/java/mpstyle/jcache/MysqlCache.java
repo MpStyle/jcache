@@ -11,7 +11,7 @@ import java.sql.Statement;
  * Lazy and naive cache using in memory SQLite database
  */
 public class MysqlCache implements Cache {
-  private final static int KEY_MAX_LENGTH = 512;
+  private final static int KEY_MAX_LENGTH = 255;
   private final static String INSERT_SQL = "INSERT INTO jcache(`key`, ttl, creation_timestamp, `value`) VALUES(?, ?, ?, ?)";
   private final static String SELECT_SQL = "SELECT `value`, `key` FROM jcache WHERE `key` = ? AND ttl + creation_timestamp > ?";
   private final static String DELETE_SQL = "DELETE FROM jcache";
